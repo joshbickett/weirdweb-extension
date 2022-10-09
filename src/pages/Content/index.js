@@ -1,7 +1,7 @@
 import { getCompletion } from '../../apis/openai';
 console.log('page loaded');
 
-const DEBUG = true;
+const DEBUG = false;
 export const changeAnchor = (element, array) => {
   if (DEBUG) console.log('element: ', element);
   if (DEBUG) console.log('array: ', array);
@@ -16,10 +16,10 @@ export const changeAnchor = (element, array) => {
 
   element.addEventListener('click', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const randomIndex = Math.floor(Math.random() * array.length);
-    if (element.nodeName === 'A') {
-      element.textContent = array[randomIndex];
-    }
+
+    element.textContent = array[randomIndex];
   });
 };
 
