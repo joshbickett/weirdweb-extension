@@ -1,7 +1,7 @@
 import { getCompletion } from '../../apis/openai';
 console.log('page loaded');
 
-const DEBUG = false;
+const DEBUG = true;
 export const changeAnchor = (element, array) => {
   if (DEBUG) console.log('element: ', element);
   if (DEBUG) console.log('array: ', array);
