@@ -1,6 +1,27 @@
-import { printLine } from './modules/print';
+console.log('page loaded');
 
-console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+export const changeAnchor = (element) => {
+  console.log('element: ', element);
+  const children = element?.children;
 
-printLine("Using the 'printLine' function from the Print Module");
+  console.log('___');
+  if (children.length > 0) {
+    for (let i = 0; i < children.length; i++) {
+      changeAnchor(children[i]);
+    }
+  }
+  // disable the anchor tag
+  if (element.nodeName === 'A') {
+    console.log('disabling anchor tag', element);
+
+    element.addEventListener('click', (e) => {
+      e.preventDefault();
+      element.textContent = 'hello!!';
+    });
+  }
+};
+
+setTimeout(() => {
+  console.log('changing anchor tags');
+  changeAnchor(document.body);
+}, 1000);
