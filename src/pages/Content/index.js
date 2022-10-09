@@ -22,6 +22,10 @@ export const changeAnchor = (element) => {
 };
 
 setTimeout(() => {
+  const title = document.title;
+  console.log('title: ', title);
+
   console.log('changing anchor tags');
+
   changeAnchor(document.body);
 }, 1000);
