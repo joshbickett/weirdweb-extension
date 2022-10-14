@@ -52,8 +52,11 @@ export const getNewContent = async (text) => {
 [
   {original: "Jimmy John", funnyEdited: "JiMMY JoHN JimMy"}, 
   {original: "A database without dynamic memory allocation ", funnyEdited: "The database is wearing a taco hat"} 
-  {original: "Hot Inflation Torches Bears in a Stock Reversal for the Ages", funnyEdited: "Bears fight inflation by less more fish"} 
+  {original: "Hot Inflation Torches Bears in a Stock Reversal for the Ages", funnyEdited: "Bears fight inflation by eating less more fish"} 
   {original: "As US Mortgage Rates Near 7%, a Warning They Could Go Much Higher", funnyEdited: "As US Mortgage Rates Near 7000%"} 
+  {original: "comments", funnyEdited: "1209120398 comments"} 
+  {original: "Kroger Wants to Merge With Albertsons to Create US Grocery Giant", funnyEdited: "Kroger and Albertsons create a super sized robot!"} 
+  {original: "Code Review Handbook ", funnyEdited: "Why not to code"} 
   {original: "${cleanText}", funnyEdited:`;
   console.log('prompt: ', prompt);
   try {

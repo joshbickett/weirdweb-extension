@@ -1,30 +1,12 @@
 import { getCompletion, getNewContent } from '../../apis/openai';
 import { loadFade, loadReturn } from './loading';
+import { startCursor } from './cursor';
+import Robot from '../../assets/img/robot.png';
 console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
 const DEBUG = false;
-export const changeAnchor = (element, array) => {
-  if (DEBUG) console.log('element: ', element);
-  if (DEBUG) console.log('array: ', array);
-  const children = element?.children;
-
-  if (DEBUG) console.log('___');
-  if (children.length > 0) {
-    for (let i = 0; i < children.length; i++) {
-      changeAnchor(children[i], array);
-    }
-  }
-
-  element.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const randomIndex = Math.floor(Math.random() * array.length);
-
-    element.textContent = array[randomIndex];
-  });
-};
 
 export const changeContent = (element) => {
   if (DEBUG) console.log('element: ', element);
@@ -37,8 +19,6 @@ export const changeContent = (element) => {
       changeContent(children[i]);
     }
   }
-
-  const thing = { apple: 'I am an apple', banana: 'I am a banana' };
 
   element.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -55,24 +35,6 @@ export const changeContent = (element) => {
   });
 };
 
-const makeWeird = async () => {
-  console.log('getting completion');
-  const title = document.title;
-  console.log('title: ', title);
-  let funnyArray = ['apples', 'and', 'bananas'];
-
-  let results = await getCompletion(title);
-  console.log('results: ', results);
-  if (results?.length) {
-    if (results[0]) {
-      funnyArray = results;
-    }
-  }
-  changeAnchor(document.body, funnyArray);
-
-  changeAnchor(document.body, funnyArray);
-};
-
 const makeWeirder = async () => {
   console.log('make weirder');
   changeContent(document.body);
@@ -81,3 +43,12 @@ const makeWeirder = async () => {
 console.log('starting make weird');
 
 makeWeirder();
+
+console.log('Robot', Robot);
+console.log('chrome.runtime.getURL(Robot);', chrome.runtime.getURL(Robot));
+const cursor = document.createElement('img');
+cursor.id = 'follow-me';
+cursor.src = chrome.runtime.getURL(Robot);
+document.body.appendChild(cursor);
+
+startCursor();

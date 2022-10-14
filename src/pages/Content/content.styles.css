@@ -1,0 +1,12 @@
+#follow-me {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  z-index: 100000;
+}
+
+body {
+  cursor: none;
+}
