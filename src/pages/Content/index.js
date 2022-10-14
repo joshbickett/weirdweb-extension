@@ -78,7 +78,7 @@ const colorLoad = (element, index) => {
   if (index < colorArray.length - 1) {
     setTimeout(() => {
       colorLoad(element, index + 1);
-    }, 50);
+    }, 100);
   }
 };
 
