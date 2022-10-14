@@ -1,4 +1,5 @@
 import { getCompletion, getNewContent } from '../../apis/openai';
+import { loadFade, loadReturn } from './loading';
 console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
@@ -42,44 +43,16 @@ export const changeContent = (element) => {
   element.addEventListener('click', async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // const newContent = await getNewContent(element.textContent);
-    // console.log('new content: ', newContent);
-    // element.textContent = newContent;
+
     // do a while loop that changes the color of the text for 5 seconds
-    colorLoad(element, 0);
+    loadFade(element, 0);
+    const newContent = await getNewContent(element.textContent);
+    console.log('new content: ', newContent);
+    element.textContent = newContent;
+    loadReturn(element, 0);
 
     // element.textContent =
   });
-};
-
-const colorLoad = (element, index) => {
-  const colorArray = [
-    '#000000',
-    '#000b0f',
-    '#00171f',
-    '#00232e',
-    '#002f3e',
-    '#003b4e',
-    '#00475d',
-    '#00536d',
-    '#005f7c',
-    '#006b8c',
-    '#00779c',
-    '#1a84a5',
-    '#338fad',
-    '#4d9cb6',
-    '#66a9bf',
-    '#80b6c8',
-    '#99c3d1',
-    '#b3d0da',
-  ];
-  element.style.color = colorArray[index];
-
-  if (index < colorArray.length - 1) {
-    setTimeout(() => {
-      colorLoad(element, index + 1);
-    }, 100);
-  }
 };
 
 const makeWeird = async () => {
