@@ -47,7 +47,13 @@ export const getCompletion = async (title) => {
 };
 
 export const getNewContent = async (text) => {
-  const prompt = `The following is a list of funny changes to phrases, keep it short: [{original: "Jimmy John", funnyEdited: "JiMMY JoHN JimMy"}, { original: ${text},  edit:`;
+  const prompt = `The following is a list of funny changes to phrases, keep it short: 
+[
+  {original: "Jimmy John", funnyEdited: "JiMMY JoHN JimMy"}, 
+  {original: "A database without dynamic memory allocation ", funnyEdited: "The database is wearing a taco hat"} 
+  {original: "Hot Inflation Torches Bears in a Stock Reversal for the Ages", funnyEdited: "Bears fight inflation by less more fish"} 
+  {original: "As US Mortgage Rates Near 7%, a Warning They Could Go Much Higher", funnyEdited: "As US Mortgage Rates Near 7000%"} 
+  {original: "${text}",  edit:`;
   console.log('prompt: ', prompt);
   try {
     const gptResponse = await openai.complete({
