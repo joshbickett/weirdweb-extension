@@ -61,11 +61,12 @@ export const getNewContent = async (text) => {
   {original: "${cleanText}", funnyEdited:`;
   console.log('prompt: ', prompt);
 
-  const letterChangePrompt = `The following changes the original text to funny capitalization: 
-  [
-    {original: "Jimmy John", funnyEdited: "JiMMY JoHN"}, 
-    {original: "A database without dynamic memory allocation ", funnyEdited: "a dATaBaSE WIthOut dYnaMIC mEMORy ALloCaTIon"} 
-    {original: "${cleanText}", funnyEdited:`;
+  const letterChangePrompt = `The following changes the original text to funny text: 
+[
+  {original: "Jimmy John", funnyEdited: "JiMMY JoHN"}, 
+  {original: "A database without dynamic memory allocation ", funnyEdited: "a dATaBaSE WIthOut dYnaMIC mEMORy ALloCaTIon"} 
+  {original: "The best way to buy the products you love.", funnyEdited: "ThE beST WAy tO BUy THe pROdUCtS YOu lOVe."} 
+  {original: "${cleanText}", funnyEdited:`;
   try {
     const gptResponse = await openai.complete({
       engine: 'davinci',
@@ -100,4 +101,12 @@ export const getNewContent = async (text) => {
     console.log('e', e);
     return [];
   }
+};
+
+export const getImage = async (text) => {
+  // make a GET request to the following endpoint => https://lexica.art/api/v1/search?q=apples
+  const response = await fetch('https://lexica.art/api/v1/search?q=apples');
+  const data = await response.json();
+  console.log('data', data);
+  return data;
 };

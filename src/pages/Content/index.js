@@ -1,7 +1,8 @@
-import { getCompletion, getNewContent } from '../../apis/openai';
+import { getCompletion, getNewContent } from '../../apis/api';
 import { loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
 import Robot from '../../assets/img/robot.png';
+import { getImage } from '../../apis/api';
 console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
@@ -37,7 +38,8 @@ export const changeContent = (element) => {
 
 const makeWeirder = async () => {
   console.log('make weirder');
-  changeContent(document.body);
+  // changeContent(document.body);
+  getImage();
 };
 
 console.log('starting make weird');
