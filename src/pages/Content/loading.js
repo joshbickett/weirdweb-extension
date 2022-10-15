@@ -102,8 +102,6 @@
 export const loadFade = async (element, index) => {
   return new Promise((resolve, reject) => {
     const fade = (el, i) => {
-      console.log('load fade');
-
       if (el.nodeName === 'IMG') {
         // const opacityArr = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
         // add more increments
@@ -112,12 +110,15 @@ export const loadFade = async (element, index) => {
           0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0,
         ];
         const opacity = opacityArr[i];
-        console.log('opacity: ', opacity);
+
         el.style.opacity = opacity;
         if (i < opacityArr.length - 1) {
+          console.log('i: ', i);
           setTimeout(() => {
-            loadFade(el, i + 1);
+            fade(el, i + 1);
           }, 50);
+        } else {
+          resolve();
         }
       } else {
         // create an array that goes through the rainbow
@@ -146,9 +147,7 @@ export const loadFade = async (element, index) => {
         ];
 
         el.style.color = fadeColor[i];
-        console.log('el', el);
 
-        console.log('index: ', i);
         if (i < fadeColor.length - 1) {
           setTimeout(() => {
             fade(el, i + 1);
@@ -174,12 +173,14 @@ export const loadReturn = async (element, index) => {
         ];
 
         const opacity = opacityArr[i];
-        i.style.opacity = opacity;
+        el.style.opacity = opacity;
         console.log('opacity: ', opacity);
         if (i < opacityArr.length - 1) {
           setTimeout(() => {
             loadReturn(el, i + 1);
-          }, 500);
+          }, 50);
+        } else {
+          resolve();
         }
       } else {
         const returnColor = [
