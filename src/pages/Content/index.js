@@ -22,9 +22,12 @@ export const changeContent = (element) => {
   }
 
   element.addEventListener('click', async (e) => {
+    if (DEBUG) console.log('eventListener: fired e =>', e);
     e.preventDefault();
     e.stopPropagation();
 
+    if (DEBUG)
+      console.log('eventListener: element.nodeName =>', element.nodeName);
     if (element.nodeName === 'IMG') {
       await loadFadeWait(element, 0);
 
@@ -35,7 +38,7 @@ export const changeContent = (element) => {
 
         element.src = newSrc;
       } else {
-        console.log('no alt');
+        if (DEBUG) console.log('eventListener: No alt text on image');
       }
     } else {
       loadFade(element, 0);
@@ -49,10 +52,9 @@ export const changeContent = (element) => {
 };
 
 const makeWeird = async () => {
+  if (DEBUG) console.log('makeWeird()');
   changeContent(document.body);
 };
-
-console.log('starting make weird');
 
 makeWeird();
 
