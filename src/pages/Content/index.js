@@ -1,5 +1,5 @@
 import { getCompletion, getNewContent } from '../../apis/api';
-import { loadFade, loadReturn } from './loading';
+import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
 import Robot from '../../assets/img/robot.png';
 import { getImage } from '../../apis/api';
@@ -25,29 +25,37 @@ export const changeContent = (element) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // do a while loop that changes the color of the text for 5 seconds
-    loadFade(element, 0);
-    const newContent = await getNewContent(element.textContent);
-    console.log('new content: ', newContent);
-    element.textContent = newContent;
-    loadReturn(element, 0);
+    if (element.nodeName === 'IMG') {
+      await loadFadeWait(element, 0);
 
-    // element.textContent =
+      const alt = element.alt;
+
+      if (alt) {
+        const newSrc = await getImage(alt);
+
+        element.src = newSrc;
+      } else {
+        console.log('no alt');
+      }
+    } else {
+      loadFade(element, 0);
+      const newContent = await getNewContent(element.textContent);
+
+      element.textContent = newContent;
+    }
+
+    await loadReturn(element, 0);
   });
 };
 
-const makeWeirder = async () => {
-  console.log('make weirder');
-  // changeContent(document.body);
-  getImage();
+const makeWeird = async () => {
+  changeContent(document.body);
 };
 
 console.log('starting make weird');
 
-makeWeirder();
+makeWeird();
 
-console.log('Robot', Robot);
-console.log('chrome.runtime.getURL(Robot);', chrome.runtime.getURL(Robot));
 const cursor = document.createElement('img');
 cursor.id = 'follow-me';
 cursor.src = chrome.runtime.getURL(Robot);

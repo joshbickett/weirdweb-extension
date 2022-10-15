@@ -20,7 +20,7 @@ const followCursor = (cursor) => {
         ((doc && doc.clientTop) || (body && body.clientTop) || 0);
     }
 
-    console.log(event.pageY, event.pageX);
+    // console.log(event.pageY, event.pageX);
 
     cursor.style.left = event.pageX + 'px';
     cursor.style.top = event.pageY + 'px';
