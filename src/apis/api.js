@@ -103,10 +103,17 @@ export const getNewContent = async (text) => {
   }
 };
 
-export const getImage = async (text) => {
+export const getImage = async (search) => {
   // make a GET request to the following endpoint => https://lexica.art/api/v1/search?q=apples
-  const response = await fetch('https://lexica.art/api/v1/search?q=apples');
+
+  const response = await fetch(`https://lexica.art/api/v1/search?q=${search}`);
   const data = await response.json();
   console.log('data', data);
-  return data;
+  const images = data.images;
+  for (let i = 0; i < images.length; i++) {
+    const image = images[i];
+    if (image.nsfw === false) {
+      return image.src;
+    }
+  }
 };
