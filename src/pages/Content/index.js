@@ -7,35 +7,22 @@ console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
-const DEBUG = false;
+const DEBUG = true;
 
-export const changeContent = (element) => {
-  if (DEBUG) console.log('element: ', element);
-
-  const children = element?.children;
-
-  if (DEBUG) console.log('___');
-  if (children.length > 0) {
-    for (let i = 0; i < children.length; i++) {
-      changeContent(children[i]);
-    }
-  }
-
-  element.addEventListener('click', async (e) => {
+const changeContent = async () => {
+  document.addEventListener('click', async (e) => {
     if (DEBUG) console.log('eventListener: fired e =>', e);
     e.preventDefault();
     e.stopPropagation();
-
+    console.log('e.target', e.target);
+    const element = e.target;
     if (DEBUG)
       console.log('eventListener: element.nodeName =>', element.nodeName);
     if (element.nodeName === 'IMG') {
       await loadFadeWait(element, 0);
-
       const alt = element.alt;
-
       if (alt) {
         const newSrc = await getImage(alt);
-
         element.src = newSrc;
       } else {
         if (DEBUG) console.log('eventListener: No alt text on image');
@@ -43,17 +30,15 @@ export const changeContent = (element) => {
     } else {
       loadFade(element, 0);
       const newContent = await getNewContent(element.textContent);
-
       element.textContent = newContent;
     }
-
     await loadReturn(element, 0);
   });
 };
 
 const makeWeird = async () => {
   if (DEBUG) console.log('makeWeird()');
-  changeContent(document.body);
+  changeContent();
 };
 
 makeWeird();
