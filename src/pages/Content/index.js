@@ -2,7 +2,7 @@ import { getCompletion, getNewContent } from '../../apis/api';
 import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
 import Robot from '../../assets/img/robot.png';
-import { getImage } from '../../apis/api';
+import { getImage, getBackground } from '../../apis/api';
 console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
@@ -23,6 +23,9 @@ const changeContent = async () => {
     switch (element.nodeName) {
       case 'IMG':
         handleImage(element);
+        break;
+      case 'BODY':
+        handleBody();
         break;
       default:
         handleText(element);
@@ -50,7 +53,12 @@ const handleText = async (element) => {
   element.textContent = newContent;
 };
 
-const handleBody = () => {};
+const handleBody = async () => {
+  if (DEBUG) console.log('eventListener: handleBody()');
+  const newBackground = await getBackground();
+  console.log('newBackground', newBackground);
+  document.body.style.backgroundImage = `url(${newBackground})`;
+};
 
 const makeWeird = async () => {
   if (DEBUG) console.log('makeWeird()');
