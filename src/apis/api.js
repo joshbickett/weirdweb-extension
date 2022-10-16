@@ -104,10 +104,21 @@ export const getNewContent = async (text) => {
   }
 };
 
+export const getBackground = async () => {
+  const response = await fetch(
+    `https://lexica.art/api/v1/search?q=simple color`
+  );
+  const data = await response.json();
+  console.log('data', data);
+  const images = data.images;
+  return selectAtRandom(images, 0);
+};
+
 export const getImage = async (search) => {
   // make a GET request to the following endpoint => https://lexica.art/api/v1/search?q=apples
+  const url = `https://lexica.art/api/v1/search?q=${search}`;
 
-  const response = await fetch(`https://lexica.art/api/v1/search?q=${search}`);
+  const response = await fetch(url);
   const data = await response.json();
   console.log('data', data);
   const images = data.images;
