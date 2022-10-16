@@ -16,25 +16,41 @@ const changeContent = async () => {
     e.stopPropagation();
     console.log('e.target', e.target);
     const element = e.target;
+
     if (DEBUG)
       console.log('eventListener: element.nodeName =>', element.nodeName);
-    if (element.nodeName === 'IMG') {
-      await loadFadeWait(element, 0);
-      const alt = element.alt;
-      if (alt) {
-        const newSrc = await getImage(alt);
-        element.src = newSrc;
-      } else {
-        if (DEBUG) console.log('eventListener: No alt text on image');
-      }
-    } else {
-      loadFade(element, 0);
-      const newContent = await getNewContent(element.textContent);
-      element.textContent = newContent;
+
+    switch (element.nodeName) {
+      case 'IMG':
+        handleImage(element);
+        break;
+      default:
+        handleText(element);
+        break;
     }
+
     await loadReturn(element, 0);
   });
 };
+
+const handleImage = async (element) => {
+  await loadFadeWait(element, 0);
+  const alt = element.alt;
+  if (alt) {
+    const newSrc = await getImage(alt);
+    element.src = newSrc;
+  } else {
+    if (DEBUG) console.log('eventListener: No alt text on image');
+  }
+};
+
+const handleText = async (element) => {
+  loadFade(element, 0);
+  const newContent = await getNewContent(element.textContent);
+  element.textContent = newContent;
+};
+
+const handleBody = () => {};
 
 const makeWeird = async () => {
   if (DEBUG) console.log('makeWeird()');
