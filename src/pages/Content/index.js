@@ -7,7 +7,7 @@ console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
-const DEBUG = true;
+const DEBUG = false;
 
 const changeContent = async () => {
   document.addEventListener('click', async (e) => {

@@ -1,9 +1,19 @@
+const handleClick = () => {
+  const cursor = document.getElementById('follow-me');
+  cursor.style.scale = '1.4';
+  setTimeout(() => {
+    cursor.style.scale = '1';
+  }, [100]);
+};
+
 const followCursor = (cursor) => {
   document.onmousemove = handleMouseMove;
+  document.addEventListener('click', handleClick);
 
   function handleMouseMove(event) {
     var eventDoc, doc, body;
     event = event || window.event;
+    console.log('event', event);
 
     if (event.pageX == null && event.clientX != null) {
       eventDoc = (event.target && event.target.ownerDocument) || document;
