@@ -1,7 +1,6 @@
 let originalColor = '#000000';
 
 export const loadFadeWait = async (element, index) => {
-  console.log('here is the original', element.style.color);
   originalColor = element.style.color;
   return new Promise((resolve, reject) => {
     const fade = (el, i) => {
@@ -16,7 +15,6 @@ export const loadFadeWait = async (element, index) => {
 
         el.style.opacity = opacity;
         if (i < opacityArr.length - 1) {
-          console.log('i: ', i);
           setTimeout(() => {
             fade(el, i + 1);
           }, 50);
@@ -65,7 +63,6 @@ export const loadFadeWait = async (element, index) => {
 };
 
 export const loadFade = async (element, index) => {
-  console.log('here is the original', element.style.color);
   originalColor = element.style.color;
   const fade = (el, i) => {
     if (el.nodeName === 'IMG') {
@@ -79,7 +76,6 @@ export const loadFade = async (element, index) => {
 
       el.style.opacity = opacity;
       if (i < opacityArr.length - 1) {
-        console.log('i: ', i);
         setTimeout(() => {
           fade(el, i + 1);
         }, 50);
@@ -126,7 +122,6 @@ export const loadReturn = async (element, index) => {
   return new Promise((resolve, reject) => {
     const returnCo = (el, i) => {
       if (el.nodeName === 'IMG') {
-        // const opacityArr = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
         const opacityArr = [
           0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6,
           0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1,
@@ -134,7 +129,7 @@ export const loadReturn = async (element, index) => {
 
         const opacity = opacityArr[i];
         el.style.opacity = opacity;
-        console.log('opacity: ', opacity);
+
         if (i < opacityArr.length - 1) {
           setTimeout(() => {
             loadReturn(el, i + 1);
@@ -165,7 +160,7 @@ export const loadReturn = async (element, index) => {
           '#000b0f',
           '#000000',
         ];
-        console.log('originalColor', originalColor);
+
         returnColor.push(originalColor);
         el.style.color = returnColor[i];
 

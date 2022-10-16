@@ -1,4 +1,5 @@
 import { getKey } from './secrets.key';
+import { getErrorImage } from '../pages/Content/error';
 const OpenAI = require('openai-api');
 // const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // console.log('open api key', OPENAI_API_KEY);
@@ -110,10 +111,16 @@ export const getImage = async (search) => {
   const data = await response.json();
   console.log('data', data);
   const images = data.images;
-  for (let i = 0; i < images.length; i++) {
-    const image = images[i];
-    if (image.nsfw === false) {
-      return image.src;
-    }
+  return selectAtRandom(images, 0);
+};
+
+const selectAtRandom = (array, tries) => {
+  const randomImage = array[Math.floor(Math.random() * array.length)];
+  if (randomImage.nsfw === true && tries < 25) {
+    selectAtRandom(array, tries + 1);
+  } else if (tries >= 25) {
+    return getErrorImage();
+  } else {
+    return randomImage.src;
   }
 };
