@@ -7,8 +7,9 @@ const OPENAI_API_KEY = getKey();
 
 const openai = new OpenAI(OPENAI_API_KEY);
 
+const DEBUG = true;
 export const getCompletion = async (title) => {
-  console.log('title in getCompletion: ', title);
+  if (DEBUG) console.log('title in getCompletion: ', title);
   const prompt = `Below are webpage, their titles, and funny lists that expose what the web page wants from the user.
 [{title: "The Office | The Show's US Website", url: 'https://www.theofficeshow.com/' list: ["Bears", "Beets", "Battlestar Galactica", "Bacon"]},{title: "10 great works of literature | newliterature.com ", url: "https://www.newliterature.com/". list: ["To", "be", "or", "not", "to be"], {title: "New York Times articles", url: "https://www.nytimes.com/", list:  ["subscribe", "please", "subscribe", "please"]}, {title: "${title}", list:`;
   console.log('prompt:', prompt);
@@ -27,10 +28,10 @@ export const getCompletion = async (title) => {
   });
 
   const response = gptResponse.data;
-  console.log('response: ', response);
+  if (DEBUG) console.log('response: ', response);
   if (response?.choices?.length > 0) {
     // funnyArray = results.choices[0].text;
-    console.log('returning: ', response.choices[0].text);
+    if (DEBUG) console.log('returning: ', response.choices[0].text);
     // remove [ and ] from the response
     const cleanResponse = response?.choices[0].text;
     var pattern = '"';
@@ -39,7 +40,7 @@ export const getCompletion = async (title) => {
       .replace('[', '')
       .replace(']', '')
       .replace(re, '');
-    console.log('array results', arrayResults);
+    if (DEBUG) console.log('array results', arrayResults);
 
     return arrayResults.split(',');
   } else {
@@ -49,18 +50,6 @@ export const getCompletion = async (title) => {
 
 export const getNewContent = async (text) => {
   const cleanText = text.replace(/[^a-zA-Z ]/g, '');
-  const prompt = `The following is a list of funny changes to phrases, keep it short: 
-[
-  {original: "Jimmy John", funnyEdited: "JiMMY JoHN JimMy"}, 
-  {original: "A database without dynamic memory allocation ", funnyEdited: "The database is wearing a taco hat"} 
-  {original: "Hot Inflation Torches Bears in a Stock Reversal for the Ages", funnyEdited: "Bears fight inflation by eating less fish"} 
-  {original: "Albert Pickle", funnyEdited: "aLBErt PiCkle"},
-  {original: "As US Mortgage Rates Near 7%, a Warning They Could Go Much Higher", funnyEdited: "As US Mortgage Rates Near 7000%"} 
-  {original: "comments", funnyEdited: "1209120398 comments"} 
-  {original: "Kroger Wants to Merge With Albertsons to Create US Grocery Giant", funnyEdited: "Kroger and Albertsons create a super sized robot!"} 
-  {original: "Code Review Handbook ", funnyEdited: "Why not to code"} 
-  {original: "${cleanText}", funnyEdited:`;
-  console.log('prompt: ', prompt);
 
   const letterChangePrompt = `The following changes the original text to funny text: 
 [
@@ -83,10 +72,10 @@ export const getNewContent = async (text) => {
       stop: ['}'],
     });
     const response = gptResponse.data;
-    console.log('response: ', response);
+    if (DEBUG) console.log('response: ', response);
     if (response?.choices?.length > 0) {
       // funnyArray = results.choices[0].text;
-      console.log('returning: ', response.choices[0].text);
+      if (DEBUG) console.log('returning: ', response.choices[0].text);
       // remove [ and ] from the response
       const cleanResponse = response?.choices[0].text;
       var pattern = '"';
@@ -95,7 +84,7 @@ export const getNewContent = async (text) => {
         .replace('[', '')
         .replace(']', '')
         .replace(re, '');
-      console.log('array results', arrayResults);
+      if (DEBUG) console.log('array results', arrayResults);
       return arrayResults.split(',');
     }
   } catch (e) {
@@ -109,7 +98,7 @@ export const getBackground = async () => {
     `https://lexica.art/api/v1/search?q=simple color`
   );
   const data = await response.json();
-  console.log('data', data);
+  if (DEBUG) console.log('data', data);
   const images = data.images;
   return selectAtRandom(images, 0);
 };
