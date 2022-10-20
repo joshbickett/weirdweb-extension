@@ -15,12 +15,13 @@ const noClicking = (e) => {
   e.stopPropagation();
 };
 
-const changeContent = (element) => {
-  if (DEBUG) console.log('element: ', element);
+const DEBUG_CHANGE = false;
+const changeContent = async (element) => {
+  if (DEBUG_CHANGE) console.log('element: ', element);
 
   const children = element?.children;
 
-  if (DEBUG) console.log('___');
+  if (DEBUG_CHANGE) console.log('___');
   if (children.length > 0) {
     for (let i = 0; i < children.length; i++) {
       changeContent(children[i]);
@@ -30,13 +31,13 @@ const changeContent = (element) => {
   element.addEventListener('mousedown', noClicking);
   element.addEventListener('mouseup', noClicking);
   element.addEventListener('click', async (e) => {
-    if (DEBUG) console.log('eventListener: fired e =>', e);
+    if (DEBUG_CHANGE) console.log('eventListener: fired e =>', e);
     e.preventDefault();
     e.stopPropagation();
     console.log('e.target', e.target);
     const element = e.target;
 
-    if (DEBUG)
+    if (DEBUG_CHANGE)
       console.log('eventListener: element.nodeName =>', element.nodeName);
 
     switch (element.nodeName) {
@@ -68,13 +69,13 @@ const changeContentOld = async () => {
 
     switch (element.nodeName) {
       case 'IMG':
-        handleImage(element);
+        await handleImage(element);
         break;
       case 'BODY':
-        handleBody();
+        await handleBody();
         break;
       default:
-        handleText(element);
+        await handleText(element);
         break;
     }
 
@@ -107,7 +108,7 @@ const handleBody = async () => {
 };
 
 const makeWeird = async () => {
-  if (DEBUG) console.log('makeWeird2()');
+  if (DEBUG) console.log('makeWeird4()');
 
   changeContent(document.body);
 };

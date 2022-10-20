@@ -7,7 +7,7 @@ const OPENAI_API_KEY = getKey();
 
 const openai = new OpenAI(OPENAI_API_KEY);
 
-const DEBUG = true;
+const DEBUG = false;
 export const getCompletion = async (title) => {
   if (DEBUG) console.log('title in getCompletion: ', title);
   const prompt = `Below are webpage, their titles, and funny lists that expose what the web page wants from the user.
