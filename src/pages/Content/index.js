@@ -34,7 +34,7 @@ const changeContent = async (element) => {
     if (DEBUG_CHANGE) console.log('eventListener: fired e =>', e);
     e.preventDefault();
     e.stopPropagation();
-    console.log('e.target', e.target);
+    if (DEBUG_CHANGE) console.log('e.target', e.target);
     const element = e.target;
 
     if (DEBUG_CHANGE)
@@ -48,12 +48,9 @@ const changeContent = async (element) => {
         await handleBody();
         break;
       default:
-        console.log('1');
         await handleText(element);
         break;
     }
-
-    console.log('loadReturn');
     await loadReturn(element, 0);
   });
 };
@@ -71,21 +68,18 @@ const handleImage = async (element) => {
 
 const handleText = async (element) => {
   loadFade(element, 0);
-  console.log('2');
   const newContent = await getNewContent(element.textContent);
-  console.log('3');
   element.textContent = newContent;
 };
 
 const handleBody = async () => {
   if (DEBUG) console.log('eventListener: handleBody()');
   const newBackground = await getBackground();
-  console.log('newBackground', newBackground);
   document.body.style.backgroundImage = `url(${newBackground})`;
 };
 
 const makeWeird = async () => {
-  if (DEBUG) console.log('makeWeird5()');
+  if (DEBUG) console.log('makeWeird()');
 
   changeContent(document.body);
 };
