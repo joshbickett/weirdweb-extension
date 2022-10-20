@@ -7,52 +7,53 @@ console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
-const DEBUG = true;
+const DEBUG_GENERAL = false;
 
 const noClicking = (e) => {
-  if (DEBUG) console.log('noClicking()');
+  if (DEBUG_GENERAL) console.log('noClicking()');
   e.preventDefault();
   e.stopPropagation();
 };
 
-const DEBUG_CHANGE = false;
+const DEBUG_CHANGE = true;
 const changeContent = async (element) => {
   if (DEBUG_CHANGE) console.log('element: ', element);
 
   const children = element?.children;
+  element.addEventListener('mousedown', noClicking);
+  element.addEventListener('mouseup', noClicking);
 
   if (DEBUG_CHANGE) console.log('___');
   if (children.length > 0) {
+    element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
       await changeContent(children[i]);
     }
+  } else {
+    element.addEventListener('click', async (e) => {
+      if (DEBUG_CHANGE) console.log('eventListener: fired e =>', e);
+      e.preventDefault();
+      e.stopPropagation();
+      if (DEBUG_CHANGE) console.log('e.target', e.target);
+      const element = e.target;
+
+      if (DEBUG_CHANGE)
+        console.log('eventListener: element.nodeName =>', element.nodeName);
+
+      switch (element.nodeName) {
+        case 'IMG':
+          await handleImage(element);
+          break;
+        case 'BODY':
+          await handleBody();
+          break;
+        default:
+          await handleText(element);
+          break;
+      }
+      await loadReturn(element, 0);
+    });
   }
-
-  element.addEventListener('mousedown', noClicking);
-  element.addEventListener('mouseup', noClicking);
-  element.addEventListener('click', async (e) => {
-    if (DEBUG_CHANGE) console.log('eventListener: fired e =>', e);
-    e.preventDefault();
-    e.stopPropagation();
-    if (DEBUG_CHANGE) console.log('e.target', e.target);
-    const element = e.target;
-
-    if (DEBUG_CHANGE)
-      console.log('eventListener: element.nodeName =>', element.nodeName);
-
-    switch (element.nodeName) {
-      case 'IMG':
-        await handleImage(element);
-        break;
-      case 'BODY':
-        await handleBody();
-        break;
-      default:
-        await handleText(element);
-        break;
-    }
-    await loadReturn(element, 0);
-  });
 };
 
 const handleImage = async (element) => {
@@ -62,7 +63,7 @@ const handleImage = async (element) => {
     const newSrc = await getImage(alt);
     element.src = newSrc;
   } else {
-    if (DEBUG) console.log('eventListener: No alt text on image');
+    if (DEBUG_GENERAL) console.log('eventListener: No alt text on image');
   }
 };
 
@@ -73,13 +74,13 @@ const handleText = async (element) => {
 };
 
 const handleBody = async () => {
-  if (DEBUG) console.log('eventListener: handleBody()');
+  if (DEBUG_GENERAL) console.log('eventListener: handleBody()');
   const newBackground = await getBackground();
   document.body.style.backgroundImage = `url(${newBackground})`;
 };
 
 const makeWeird = async () => {
-  if (DEBUG) console.log('makeWeird()');
+  if (DEBUG_GENERAL) console.log('makeWeird()');
 
   changeContent(document.body);
 };
