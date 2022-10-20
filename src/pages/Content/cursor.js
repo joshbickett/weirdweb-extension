@@ -1,4 +1,4 @@
-const handleClick = () => {
+export const handleClick = () => {
   const cursor = document.getElementById('follow-me');
   cursor.style.scale = '1.4';
   setTimeout(() => {
@@ -8,7 +8,6 @@ const handleClick = () => {
 
 const followCursor = (cursor) => {
   document.onmousemove = handleMouseMove;
-  document.addEventListener('click', handleClick);
 
   function handleMouseMove(event) {
     var eventDoc, doc, body;

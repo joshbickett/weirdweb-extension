@@ -1,4 +1,5 @@
 import { getCompletion, getNewContent } from '../../apis/api';
+import { handleClick } from './cursor';
 import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
 import Robot from '../../assets/img/robot.png';
@@ -15,7 +16,8 @@ const noClicking = (e) => {
   e.stopPropagation();
 };
 
-const DEBUG_CHANGE = true;
+const DEBUG_CHANGE = false;
+const DEBUG_LISTENER = true;
 const changeContent = async (element) => {
   if (DEBUG_CHANGE) console.log('element: ', element);
 
@@ -31,13 +33,14 @@ const changeContent = async (element) => {
     }
   } else {
     element.addEventListener('click', async (e) => {
-      if (DEBUG_CHANGE) console.log('eventListener: fired e =>', e);
+      if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
+      handleClick();
       e.preventDefault();
       e.stopPropagation();
-      if (DEBUG_CHANGE) console.log('e.target', e.target);
+      if (DEBUG_LISTENER) console.log('e.target', e.target);
       const element = e.target;
 
-      if (DEBUG_CHANGE)
+      if (DEBUG_LISTENER)
         console.log('eventListener: element.nodeName =>', element.nodeName);
 
       switch (element.nodeName) {
@@ -63,7 +66,7 @@ const handleImage = async (element) => {
     const newSrc = await getImage(alt);
     element.src = newSrc;
   } else {
-    if (DEBUG_GENERAL) console.log('eventListener: No alt text on image');
+    if (DEBUG_LISTENER) console.log('eventListener: No alt text on image');
   }
 };
 
@@ -74,7 +77,7 @@ const handleText = async (element) => {
 };
 
 const handleBody = async () => {
-  if (DEBUG_GENERAL) console.log('eventListener: handleBody()');
+  if (DEBUG_LISTENER) console.log('eventListener: handleBody()');
   const newBackground = await getBackground();
   document.body.style.backgroundImage = `url(${newBackground})`;
 };
