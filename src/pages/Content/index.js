@@ -7,9 +7,55 @@ console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
-const DEBUG = false;
+const DEBUG = true;
 
-const changeContent = async () => {
+const noClicking = (e) => {
+  console.log("You're not supposed to click on anything!");
+  e.preventDefault();
+  e.stopPropagation();
+};
+
+const changeContent = (element) => {
+  if (DEBUG) console.log('element: ', element);
+
+  const children = element?.children;
+
+  if (DEBUG) console.log('___');
+  if (children.length > 0) {
+    for (let i = 0; i < children.length; i++) {
+      changeContent(children[i]);
+    }
+  }
+
+  element.addEventListener('mousedown', noClicking);
+  element.addEventListener('mouseup', noClicking);
+  element.addEventListener('click', async (e) => {
+    if (DEBUG) console.log('eventListener: fired e =>', e);
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('e.target', e.target);
+    const element = e.target;
+
+    if (DEBUG)
+      console.log('eventListener: element.nodeName =>', element.nodeName);
+
+    switch (element.nodeName) {
+      case 'IMG':
+        handleImage(element);
+        break;
+      case 'BODY':
+        handleBody();
+        break;
+      default:
+        handleText(element);
+        break;
+    }
+
+    await loadReturn(element, 0);
+  });
+};
+
+const changeContentOld = async () => {
   document.addEventListener('click', async (e) => {
     if (DEBUG) console.log('eventListener: fired e =>', e);
     e.preventDefault();
@@ -61,8 +107,9 @@ const handleBody = async () => {
 };
 
 const makeWeird = async () => {
-  if (DEBUG) console.log('makeWeird()');
-  changeContent();
+  if (DEBUG) console.log('makeWeird2()');
+
+  changeContent(document.body);
 };
 
 makeWeird();

@@ -13,7 +13,6 @@ const followCursor = (cursor) => {
   function handleMouseMove(event) {
     var eventDoc, doc, body;
     event = event || window.event;
-    console.log('event', event);
 
     if (event.pageX == null && event.clientX != null) {
       eventDoc = (event.target && event.target.ownerDocument) || document;
