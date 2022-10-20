@@ -10,7 +10,7 @@ console.log('page loaded');
 const DEBUG = true;
 
 const noClicking = (e) => {
-  console.log("You're not supposed to click on anything!");
+  if (DEBUG) console.log('noClicking()');
   e.preventDefault();
   e.stopPropagation();
 };
@@ -24,7 +24,7 @@ const changeContent = async (element) => {
   if (DEBUG_CHANGE) console.log('___');
   if (children.length > 0) {
     for (let i = 0; i < children.length; i++) {
-      changeContent(children[i]);
+      await changeContent(children[i]);
     }
   }
 
@@ -42,43 +42,18 @@ const changeContent = async (element) => {
 
     switch (element.nodeName) {
       case 'IMG':
-        handleImage(element);
-        break;
-      case 'BODY':
-        handleBody();
-        break;
-      default:
-        handleText(element);
-        break;
-    }
-
-    await loadReturn(element, 0);
-  });
-};
-
-const changeContentOld = async () => {
-  document.addEventListener('click', async (e) => {
-    if (DEBUG) console.log('eventListener: fired e =>', e);
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('e.target', e.target);
-    const element = e.target;
-
-    if (DEBUG)
-      console.log('eventListener: element.nodeName =>', element.nodeName);
-
-    switch (element.nodeName) {
-      case 'IMG':
         await handleImage(element);
         break;
       case 'BODY':
         await handleBody();
         break;
       default:
+        console.log('1');
         await handleText(element);
         break;
     }
 
+    console.log('loadReturn');
     await loadReturn(element, 0);
   });
 };
@@ -96,7 +71,9 @@ const handleImage = async (element) => {
 
 const handleText = async (element) => {
   loadFade(element, 0);
+  console.log('2');
   const newContent = await getNewContent(element.textContent);
+  console.log('3');
   element.textContent = newContent;
 };
 
@@ -108,7 +85,7 @@ const handleBody = async () => {
 };
 
 const makeWeird = async () => {
-  if (DEBUG) console.log('makeWeird4()');
+  if (DEBUG) console.log('makeWeird5()');
 
   changeContent(document.body);
 };

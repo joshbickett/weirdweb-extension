@@ -52,7 +52,7 @@ export const loadFadeWait = async (element, index) => {
         if (i < fadeColor.length - 1) {
           setTimeout(() => {
             fade(el, i + 1);
-          }, 50);
+          }, 75);
         } else {
           resolve();
         }
@@ -66,8 +66,6 @@ export const loadFade = async (element, index) => {
   originalColor = element.style.color;
   const fade = (el, i) => {
     if (el.nodeName === 'IMG') {
-      // const opacityArr = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0];
-      // add more increments
       const opacityArr = [
         1, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.45, 0.4,
         0.35, 0.3, 0.25, 0.2, 0.15, 0.1, 0,
@@ -109,6 +107,7 @@ export const loadFade = async (element, index) => {
       el.style.color = fadeColor[i];
 
       if (i < fadeColor.length - 1) {
+        console.log('uh??');
         setTimeout(() => {
           fade(el, i + 1);
         }, 50);
@@ -167,7 +166,7 @@ export const loadReturn = async (element, index) => {
         if (i < returnColor.length - 1) {
           setTimeout(() => {
             returnCo(el, i + 1);
-          }, 50);
+          }, 75);
         } else {
           resolve();
         }
