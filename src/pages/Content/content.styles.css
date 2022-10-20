@@ -13,6 +13,48 @@ body {
 a {
   cursor: none;
 }
+span {
+  cursor: none;
+}
 div {
+  cursor: none;
+}
+p {
+  cursor: none;
+}
+h1 {
+  cursor: none;
+}
+h2 {
+  cursor: none;
+}
+h3 {
+  cursor: none;
+}
+h4 {
+  cursor: none;
+}
+h5 {
+  cursor: none;
+}
+h6 {
+  cursor: none;
+}
+li {
+  cursor: none;
+}
+ul {
+  cursor: none;
+}
+ol {
+  cursor: none;
+}
+img {
+  cursor: none;
+}
+button {
+  cursor: none;
+}
+input {
   cursor: none;
 }
