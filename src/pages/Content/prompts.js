@@ -23,3 +23,15 @@ export const getBetterNewsPrompt = (cleanText) => {
     {original: "${cleanText}", funnyEdited:`;
   return prompt;
 };
+
+export const getTurtleContentPrompt = (cleanText) => {
+  const prompt = `The following changes the original text to funny text about turtles: 
+[
+  {original: "Jimmy John", funnyEdited: "Jimmy Turtle"}, 
+  {original: "A database without dynamic memory allocation ", funnyEdited: "A database without dynamic TURTLES"}"} 
+  {original: "The best way to buy the products you love.", funnyEdited: "Products are just Turtles"} 
+  {original: "Billionaire Bankman-Fried Tries to Fix Crypto’s Hacking Problem", funnyEdited: "Billionaire Bankman-Fried buys 10,000 turtles"}
+  {original: "Markets Calling: Forget It, Tories, You Can Go It Alone", funnyEdited: "Markets calling: We need more turtles"}
+  {original: "${cleanText}", funnyEdited:`;
+  return prompt;
+};
