@@ -45,6 +45,7 @@ const changeContent = async (element) => {
       if (DEBUG_LISTENER)
         console.log('eventListener: element.nodeName =>', element.nodeName);
 
+      await loadFadeWait(element, 0);
       switch (element.nodeName) {
         case 'IMG':
           await handleImage(element);
@@ -62,7 +63,6 @@ const changeContent = async (element) => {
 };
 
 const handleImage = async (element) => {
-  await loadFadeWait(element, 0);
   const alt = element.alt;
   if (alt) {
     const newSrc = await getImage(alt);
@@ -74,7 +74,7 @@ const handleImage = async (element) => {
 };
 
 const handleText = async (element) => {
-  loadFade(element, 0);
+  // loadFade(element, 0);
   // const newContent = await getNewContent(element.textContent);
   const newContent = randomCaps(element.textContent);
   console.log('newContent', newContent);
