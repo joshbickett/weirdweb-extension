@@ -4,6 +4,8 @@ import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
 import Robot from '../../assets/img/robot.png';
 import { getImage, getBackground } from '../../apis/api';
+import { randomCaps } from './random';
+
 console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
@@ -64,6 +66,7 @@ const handleImage = async (element) => {
   const alt = element.alt;
   if (alt) {
     const newSrc = await getImage(alt);
+
     element.src = newSrc;
   } else {
     if (DEBUG_LISTENER) console.log('eventListener: No alt text on image');
@@ -72,13 +75,17 @@ const handleImage = async (element) => {
 
 const handleText = async (element) => {
   loadFade(element, 0);
-  const newContent = await getNewContent(element.textContent);
+  // const newContent = await getNewContent(element.textContent);
+  const newContent = randomCaps(element.textContent);
+  console.log('newContent', newContent);
+
   element.textContent = newContent;
 };
 
 const handleBody = async () => {
   if (DEBUG_LISTENER) console.log('eventListener: handleBody()');
   const newBackground = await getBackground();
+
   document.body.style.backgroundImage = `url(${newBackground})`;
 };
 
@@ -86,6 +93,21 @@ const makeWeird = async () => {
   if (DEBUG_GENERAL) console.log('makeWeird()');
 
   changeContent(document.body);
+  document.body.addEventListener('click', async (e) => {
+    if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
+    handleClick();
+    e.preventDefault();
+    e.stopPropagation();
+    if (DEBUG_LISTENER) console.log('e.target', e.target);
+    const element = e.target;
+
+    if (DEBUG_LISTENER)
+      console.log('eventListener: element.nodeName =>', element.nodeName);
+
+    if (element.nodeName === 'BODY') {
+      handleBody();
+    }
+  });
 };
 
 makeWeird();
