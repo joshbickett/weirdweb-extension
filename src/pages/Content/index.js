@@ -1,4 +1,3 @@
-import { getNewContent } from '../../apis/api';
 import { handleClick } from './cursor';
 import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
@@ -75,8 +74,7 @@ const handleImage = async (element) => {
 
 const handleText = async (element) => {
   loadFade(element, 0);
-  const newContent = await getNewContent(element.textContent);
-  // const newContent = randomCaps(element.textContent);
+  const newContent = randomCaps(element.textContent);
   console.log('newContent', newContent);
 
   element.textContent = newContent;
