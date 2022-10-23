@@ -1,9 +1,6 @@
 import { getKey } from './secrets.key';
 import { getErrorImage } from '../pages/Content/error';
-import {
-  getFunnyPrompt,
-  getLetterChangePrompt,
-} from '../pages/Content/prompts';
+import { getLetterChangePrompt } from '../pages/Content/prompts';
 const OpenAI = require('openai-api');
 // const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // console.log('open api key', OPENAI_API_KEY);
