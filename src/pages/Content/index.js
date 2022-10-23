@@ -1,4 +1,4 @@
-import { getCompletion, getNewContent } from '../../apis/api';
+import { getNewContent } from '../../apis/api';
 import { handleClick } from './cursor';
 import { loadFadeWait, loadFade, loadReturn } from './loading';
 import { startCursor } from './cursor';
@@ -45,7 +45,7 @@ const changeContent = async (element) => {
       if (DEBUG_LISTENER)
         console.log('eventListener: element.nodeName =>', element.nodeName);
 
-      await loadFadeWait(element, 0);
+      // await loadFadeWait(element, 0);
       switch (element.nodeName) {
         case 'IMG':
           await handleImage(element);
@@ -74,9 +74,9 @@ const handleImage = async (element) => {
 };
 
 const handleText = async (element) => {
-  // loadFade(element, 0);
-  // const newContent = await getNewContent(element.textContent);
-  const newContent = randomCaps(element.textContent);
+  loadFade(element, 0);
+  const newContent = await getNewContent(element.textContent);
+  // const newContent = randomCaps(element.textContent);
   console.log('newContent', newContent);
 
   element.textContent = newContent;
