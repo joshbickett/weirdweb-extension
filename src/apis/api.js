@@ -14,9 +14,12 @@ const openai = new OpenAI(OPENAI_API_KEY);
 const DEBUG = false;
 
 export const getNewContent = async (text) => {
-  const cleanText = text.replace(/[^a-zA-Z ]/g, '');
+  // get clean text
+  const cleanText = text.replace(/[^a-zA-Z ]/g, '').trim();
+  if (DEBUG) console.log('cleanText', cleanText);
 
   const prompt = getBetterNewsPrompt(cleanText);
+  console.log('prompt', prompt);
   try {
     const gptResponse = await openai.complete({
       engine: 'davinci',
