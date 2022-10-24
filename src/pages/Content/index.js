@@ -117,12 +117,18 @@ const makeWeird = async () => {
         }
       });
 
+      if (DEBUG_GENERAL) console.log('appending cursor');
       const cursor = document.createElement('img');
       cursor.id = 'follow-me';
       cursor.src = chrome.runtime.getURL(Robot);
       document.body.appendChild(cursor);
 
       startCursor();
+      // append content.styles.css to the head
+      const style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = chrome.runtime.getURL('content.styles.css');
+      document.head.appendChild(style);
     } else {
       if (DEBUG_GENERAL) console.log('makeWeird() disabled');
     }
