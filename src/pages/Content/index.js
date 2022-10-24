@@ -44,7 +44,7 @@ const changeContent = async (element) => {
       if (DEBUG_LISTENER)
         console.log('eventListener: element.nodeName =>', element.nodeName);
 
-      // await loadFadeWait(element, 0);
+      await loadFadeWait(element, 0);
       switch (element.nodeName) {
         case 'IMG':
           await handleImage(element);
@@ -73,7 +73,6 @@ const handleImage = async (element) => {
 };
 
 const handleText = async (element) => {
-  loadFade(element, 0);
   const newContent = randomCaps(element.textContent);
   console.log('newContent', newContent);
 
