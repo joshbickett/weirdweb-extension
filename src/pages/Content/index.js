@@ -34,29 +34,35 @@ const changeContent = async (element) => {
     }
   } else {
     element.addEventListener('click', async (e) => {
-      if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
-      handleClick();
-      e.preventDefault();
-      e.stopPropagation();
-      if (DEBUG_LISTENER) console.log('e.target', e.target);
-      const element = e.target;
+      chrome.storage.local.get(['enabled'], async (result) => {
+        if (result.enabled) {
+          if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
+          handleClick();
+          e.preventDefault();
+          e.stopPropagation();
+          if (DEBUG_LISTENER) console.log('e.target', e.target);
+          const element = e.target;
 
-      if (DEBUG_LISTENER)
-        console.log('eventListener: element.nodeName =>', element.nodeName);
+          if (DEBUG_LISTENER)
+            console.log('eventListener: element.nodeName =>', element.nodeName);
 
-      await loadFadeWait(element, 0);
-      switch (element.nodeName) {
-        case 'IMG':
-          await handleImage(element);
-          break;
-        case 'BODY':
-          await handleBody();
-          break;
-        default:
-          await handleText(element);
-          break;
-      }
-      await loadReturn(element, 0);
+          await loadFadeWait(element, 0);
+          switch (element.nodeName) {
+            case 'IMG':
+              await handleImage(element);
+              break;
+            case 'BODY':
+              await handleBody();
+              break;
+            default:
+              await handleText(element);
+              break;
+          }
+          await loadReturn(element, 0);
+        } else {
+          if (DEBUG_GENERAL) console.log('makeWeird() onclick disabled');
+        }
+      });
     });
   }
 };
@@ -87,22 +93,29 @@ const handleBody = async () => {
 };
 
 const makeWeird = async () => {
-  if (DEBUG_GENERAL) console.log('makeWeird()');
+  // chrome.storage.local.set({ enabled: e.target.checked });
+  chrome.storage.local.get(['enabled'], (result) => {
+    if (result.enabled) {
+      if (DEBUG_GENERAL) console.log('makeWeird() enabled');
 
-  changeContent(document.body);
-  document.body.addEventListener('click', async (e) => {
-    if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
-    handleClick();
-    e.preventDefault();
-    e.stopPropagation();
-    if (DEBUG_LISTENER) console.log('e.target', e.target);
-    const element = e.target;
+      changeContent(document.body);
+      document.body.addEventListener('click', async (e) => {
+        if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
+        handleClick();
+        e.preventDefault();
+        e.stopPropagation();
+        if (DEBUG_LISTENER) console.log('e.target', e.target);
+        const element = e.target;
 
-    if (DEBUG_LISTENER)
-      console.log('eventListener: element.nodeName =>', element.nodeName);
+        if (DEBUG_LISTENER)
+          console.log('eventListener: element.nodeName =>', element.nodeName);
 
-    if (element.nodeName === 'BODY') {
-      handleBody();
+        if (element.nodeName === 'BODY') {
+          handleBody();
+        }
+      });
+    } else {
+      if (DEBUG_GENERAL) console.log('makeWeird() disabled');
     }
   });
 };
