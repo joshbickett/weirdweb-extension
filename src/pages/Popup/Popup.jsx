@@ -1,11 +1,20 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../assets/img/robot.png';
 import Greetings from '../../containers/Greetings/Greetings';
 import Switch from '@mui/material/Switch';
 import './Popup.css';
 
 const Popup = () => {
+  useEffect(() => {
+    chrome.storage.local.get(['enabled'], function (result) {
+      if (result?.enabled) setOn(true);
+      else setOn(false);
+    });
+  }, []);
+  const [on, setOn] = useState(false);
   const update = (e) => {
+    setOn(e.target.checked);
     console.log('update', e.target.checked);
     chrome.storage.local.set({ enabled: e.target.checked });
   };
@@ -29,7 +38,7 @@ const Popup = () => {
           }}
         >
           <div>Make weird</div>
-          <Switch onChange={update} />
+          <Switch onChange={update} checked={on} />
         </div>
       </header>
     </div>
