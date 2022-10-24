@@ -17,6 +17,11 @@ const Popup = () => {
     setOn(e.target.checked);
     console.log('update', e.target.checked);
     chrome.storage.local.set({ enabled: e.target.checked });
+    // reload the content script to update the page
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      console.log('reload page');
+      chrome.tabs.reload(tabs[0].id);
+    });
   };
   return (
     <div className="App">
