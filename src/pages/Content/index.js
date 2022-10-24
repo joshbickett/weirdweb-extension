@@ -9,7 +9,7 @@ console.log('page loaded');
 
 // create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
 
-const DEBUG_GENERAL = false;
+const DEBUG_GENERAL = true;
 
 const noClicking = (e) => {
   if (DEBUG_GENERAL) console.log('noClicking()');
@@ -35,7 +35,7 @@ const changeContent = async (element) => {
   } else {
     element.addEventListener('click', async (e) => {
       chrome.storage.local.get(['enabled'], async (result) => {
-        if (result.enabled) {
+        if (result?.enabled) {
           if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
           handleClick();
           e.preventDefault();
@@ -94,8 +94,10 @@ const handleBody = async () => {
 
 const makeWeird = async () => {
   // chrome.storage.local.set({ enabled: e.target.checked });
+  console.log('getting from storage');
   chrome.storage.local.get(['enabled'], (result) => {
-    if (result.enabled) {
+    console.log('makeWeird() result', result);
+    if (result?.enabled) {
       if (DEBUG_GENERAL) console.log('makeWeird() enabled');
 
       changeContent(document.body);
@@ -114,6 +116,13 @@ const makeWeird = async () => {
           handleBody();
         }
       });
+
+      const cursor = document.createElement('img');
+      cursor.id = 'follow-me';
+      cursor.src = chrome.runtime.getURL(Robot);
+      document.body.appendChild(cursor);
+
+      startCursor();
     } else {
       if (DEBUG_GENERAL) console.log('makeWeird() disabled');
     }
@@ -121,10 +130,3 @@ const makeWeird = async () => {
 };
 
 makeWeird();
-
-const cursor = document.createElement('img');
-cursor.id = 'follow-me';
-cursor.src = chrome.runtime.getURL(Robot);
-document.body.appendChild(cursor);
-
-startCursor();
