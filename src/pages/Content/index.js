@@ -26,7 +26,6 @@ const changeContent = async (element, winningElement) => {
   // console.log('________');
   // console.log('element: ', element);
   // console.log('winningElement', winningElement);
-  if (DEBUG_CHANGE) console.log('count', count);
 
   const children = element?.children;
   element.addEventListener('mousedown', noClicking);
@@ -36,10 +35,18 @@ const changeContent = async (element, winningElement) => {
   if (children.length > 0) {
     element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
-      count++;
       await changeContent(children[i], winningElement);
     }
   } else {
+    console.log('count', count);
+    let winner = false;
+    if (count === winningElement) {
+      console.log('winning element');
+      console.log('element', element);
+      winner = true;
+      element.id = 'winner';
+    }
+    count++;
     element.addEventListener('click', async (e) => {
       chrome.storage.local.get(['enabled'], async (result) => {
         if (result?.enabled) {
@@ -56,13 +63,10 @@ const changeContent = async (element, winningElement) => {
           await loadFadeWait(element, 0);
           switch (element.nodeName) {
             case 'IMG':
-              await handleImage(element);
-              break;
-            case 'BODY':
-              await handleBody();
+              await handleImage(element, winner);
               break;
             default:
-              await handleText(element);
+              await handleText(element, winner);
               break;
           }
           await loadReturn(element, 0);
@@ -86,9 +90,16 @@ const countEndNodes = () => {
   return count;
 };
 
-const handleImage = async (element) => {
+const handleImage = async (element, winner) => {
   const alt = element.alt;
-  if (alt) {
+  if (winner) {
+    const newSrc = await getImage('winner');
+    element.src = newSrc;
+    // redirect to winning link
+    setTimeout(() => {
+      window.location.href = winningLink;
+    }, 3000);
+  } else if (alt) {
     const newSrc = await getImage(alt);
 
     element.src = newSrc;
@@ -97,11 +108,18 @@ const handleImage = async (element) => {
   }
 };
 
-const handleText = async (element) => {
-  const newContent = randomCaps(element.textContent);
-  console.log('newContent', newContent);
+const handleText = async (element, winner) => {
+  if (winner) {
+    element.innerHTML = 'WINNER 👾';
+    setTimeout(() => {
+      window.location.href = winningLink;
+    }, 3000);
+  } else {
+    const newContent = randomCaps(element.textContent);
+    console.log('newContent', newContent);
 
-  element.textContent = newContent;
+    element.textContent = newContent;
+  }
 };
 
 const handleBody = async () => {
