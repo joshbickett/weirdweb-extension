@@ -42,7 +42,7 @@ const Popup = () => {
             justifyContent: 'center',
           }}
         >
-          <div>Make weird</div>
+          <div>Play weird web</div>
           <Switch onChange={update} checked={on} />
         </div>
       </header>

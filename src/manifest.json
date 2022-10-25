@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Weirdweb.ai - An AI powered web game.",
   "version": "0.0.0.1",
-  "description": "Weirdweb is a Chrome Extension based game that changes your page with AI",
+  "description": "Weirdweb is a Chrome Extension based game that changes your page with AI. Only one link on the page will take you to the winning page!",
   "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html",
