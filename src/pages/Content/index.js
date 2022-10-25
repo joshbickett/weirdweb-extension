@@ -26,8 +26,7 @@ const changeContent = async (element, winningElement) => {
   // console.log('________');
   // console.log('element: ', element);
   // console.log('winningElement', winningElement);
-  console.log('count', count);
-  count++;
+  if (DEBUG_CHANGE) console.log('count', count);
 
   const children = element?.children;
   element.addEventListener('mousedown', noClicking);
@@ -37,6 +36,7 @@ const changeContent = async (element, winningElement) => {
   if (children.length > 0) {
     element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
+      count++;
       await changeContent(children[i], winningElement);
     }
   } else {
@@ -74,32 +74,16 @@ const changeContent = async (element, winningElement) => {
   }
 };
 
-const countElementsOnPage = () => {
-  const elements = document.getElementsByTagName('*');
-  const scriptCount = document.getElementsByTagName('script').length;
-  const styleCount = document.getElementsByTagName('style').length;
-  const linkCount = document.getElementsByTagName('link').length;
-  const noScriptCount = document.getElementsByTagName('noscript').length;
-  const metaCount = document.getElementsByTagName('meta').length;
-  const titleCount = document.getElementsByTagName('title').length;
-
-  const elementCount = elements.length;
-  console.log('elements count ', elementCount);
-  console.log('script count ', scriptCount);
-  console.log('style count ', styleCount);
-  console.log('link count ', linkCount);
-  const cleanElementCount =
-    elementCount -
-    scriptCount -
-    styleCount -
-    linkCount -
-    noScriptCount -
-    metaCount -
-    titleCount;
-
-  if (DEBUG_GENERAL)
-    console.log('countElementsOnPage() count: ', cleanElementCount);
-  return cleanElementCount;
+const countEndNodes = () => {
+  let count = 0;
+  const elements = document.body.getElementsByTagName('*');
+  for (let i = 0; i < elements.length; i++) {
+    if (elements[i].children.length === 0) {
+      count++;
+    }
+  }
+  console.log('countEndNodes()', count);
+  return count;
 };
 
 const handleImage = async (element) => {
@@ -128,19 +112,17 @@ const handleBody = async () => {
 };
 
 const makeWeird = async () => {
-  // chrome.storage.local.set({ enabled: e.target.checked });
-  console.log('getting from storage');
   chrome.storage.local.get(['enabled'], (result) => {
-    console.log('makeWeird() result', result);
+    if (DEBUG_GENERAL) console.log('makeWeird() result', result);
     if (result?.enabled) {
       if (DEBUG_GENERAL) console.log('makeWeird() enabled');
 
-      const elementCount = countElementsOnPage();
-      // get random number between 0 and elementCount
-      const winningElement = Math.floor(Math.random() * elementCount);
-      console.log('winningElement', winningElement, 0);
+      const endNodes = countEndNodes();
 
-      changeContent(document.body, winningElement, 0);
+      const winningElement = Math.floor(Math.random() * endNodes);
+      if (DEBUG_GENERAL) console.log('winningElement', winningElement);
+
+      changeContent(document.body, winningElement);
       document.body.addEventListener('click', async (e) => {
         if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
         handleClick();
