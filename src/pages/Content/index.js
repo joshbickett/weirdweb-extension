@@ -21,11 +21,10 @@ const noClicking = (e) => {
 const DEBUG_CHANGE = false;
 const DEBUG_LISTENER = true;
 let count = 0;
-const changeContent = async (element, winningElement) => {
+let winningElement = 0;
+let endNodesCount = 0;
+const changeContent = async (element) => {
   if (DEBUG_CHANGE) console.log('element: ', element);
-  // console.log('________');
-  // console.log('element: ', element);
-  // console.log('winningElement', winningElement);
 
   const children = element?.children;
   element.addEventListener('mousedown', noClicking);
@@ -35,16 +34,29 @@ const changeContent = async (element, winningElement) => {
   if (children.length > 0) {
     element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
-      await changeContent(children[i], winningElement);
+      await changeContent(children[i]);
     }
   } else {
     console.log('count', count);
     let winner = false;
+
     if (count === winningElement) {
-      console.log('winning element');
-      console.log('element', element);
-      winner = true;
-      element.id = 'winner';
+      let winnerOk = checkWinner(element);
+      if (winnerOk) {
+        console.log('winning element');
+        console.log('element', element);
+        winner = true;
+        element.id = 'winner';
+      } else {
+        console.log('winner is not ok');
+        console.log('winningElement', winningElement);
+        console.log('endNodesCount', endNodesCount);
+        if (winningElement < endNodesCount) {
+          winningElement++;
+        } else {
+          console.log('no winner!');
+        }
+      }
     }
     count++;
     element.addEventListener('click', async (e) => {
@@ -135,12 +147,12 @@ const makeWeird = async () => {
     if (result?.enabled) {
       if (DEBUG_GENERAL) console.log('makeWeird() enabled');
 
-      const endNodes = countEndNodes();
+      endNodesCount = countEndNodes();
 
-      const winningElement = Math.floor(Math.random() * endNodes);
+      winningElement = Math.floor(Math.random() * endNodesCount);
       if (DEBUG_GENERAL) console.log('winningElement', winningElement);
 
-      changeContent(document.body, winningElement);
+      changeContent(document.body);
       document.body.addEventListener('click', async (e) => {
         if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
         handleClick();
@@ -173,6 +185,30 @@ const makeWeird = async () => {
       if (DEBUG_GENERAL) console.log('makeWeird() disabled');
     }
   });
+};
+
+const checkWinner = (element) => {
+  let elementOk = true;
+  if (
+    [
+      'SCRIPT',
+      'STYLE',
+      'LINK',
+      'META',
+      'TITLE',
+      'HEAD',
+      'HTML',
+      'BODY',
+      'NOSCRIPT',
+      'IFRAME',
+    ].includes(element.nodeName)
+  ) {
+    elementOk = false;
+  }
+  if (element.textContent.trim() === '') {
+    elementOk = false;
+  }
+  return elementOk;
 };
 
 makeWeird();
