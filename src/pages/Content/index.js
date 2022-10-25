@@ -7,7 +7,8 @@ import { randomCaps } from './random';
 
 console.log('page loaded');
 
-// create a list of sites it works on: reddit, twitter, washingtonpost, bloomberg, linkedin, google.com
+const winningLink =
+  'https://band-danger-251.notion.site/Weirdweb-ai-959d4e8462fa45af9c74a31f92569789';
 
 const DEBUG_GENERAL = true;
 
@@ -19,8 +20,14 @@ const noClicking = (e) => {
 
 const DEBUG_CHANGE = false;
 const DEBUG_LISTENER = true;
-const changeContent = async (element) => {
+let count = 0;
+const changeContent = async (element, winningElement) => {
   if (DEBUG_CHANGE) console.log('element: ', element);
+  // console.log('________');
+  // console.log('element: ', element);
+  // console.log('winningElement', winningElement);
+  console.log('count', count);
+  count++;
 
   const children = element?.children;
   element.addEventListener('mousedown', noClicking);
@@ -30,7 +37,7 @@ const changeContent = async (element) => {
   if (children.length > 0) {
     element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
-      await changeContent(children[i]);
+      await changeContent(children[i], winningElement);
     }
   } else {
     element.addEventListener('click', async (e) => {
@@ -67,6 +74,34 @@ const changeContent = async (element) => {
   }
 };
 
+const countElementsOnPage = () => {
+  const elements = document.getElementsByTagName('*');
+  const scriptCount = document.getElementsByTagName('script').length;
+  const styleCount = document.getElementsByTagName('style').length;
+  const linkCount = document.getElementsByTagName('link').length;
+  const noScriptCount = document.getElementsByTagName('noscript').length;
+  const metaCount = document.getElementsByTagName('meta').length;
+  const titleCount = document.getElementsByTagName('title').length;
+
+  const elementCount = elements.length;
+  console.log('elements count ', elementCount);
+  console.log('script count ', scriptCount);
+  console.log('style count ', styleCount);
+  console.log('link count ', linkCount);
+  const cleanElementCount =
+    elementCount -
+    scriptCount -
+    styleCount -
+    linkCount -
+    noScriptCount -
+    metaCount -
+    titleCount;
+
+  if (DEBUG_GENERAL)
+    console.log('countElementsOnPage() count: ', cleanElementCount);
+  return cleanElementCount;
+};
+
 const handleImage = async (element) => {
   const alt = element.alt;
   if (alt) {
@@ -100,7 +135,12 @@ const makeWeird = async () => {
     if (result?.enabled) {
       if (DEBUG_GENERAL) console.log('makeWeird() enabled');
 
-      changeContent(document.body);
+      const elementCount = countElementsOnPage();
+      // get random number between 0 and elementCount
+      const winningElement = Math.floor(Math.random() * elementCount);
+      console.log('winningElement', winningElement, 0);
+
+      changeContent(document.body, winningElement, 0);
       document.body.addEventListener('click', async (e) => {
         if (DEBUG_LISTENER) console.log('eventListener: fired e =>', e);
         handleClick();
