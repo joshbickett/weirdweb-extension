@@ -53,7 +53,6 @@ const updateImages = async (element) => {
     }
     index++;
     element.addEventListener('click', async (e) => {
-      console.log('clicked!!');
       chrome.storage.local.get(['enabled'], async (result) => {
         if (result?.enabled) {
           if (DEBUG) console.log('eventListener: fired e =>', e);
@@ -65,7 +64,7 @@ const updateImages = async (element) => {
 
           await loadFadeWait(element, 0);
 
-          await handleImage(element, winner);
+          await handleImageClick(element, winner);
 
           await loadReturn(element, 0);
         } else {
@@ -86,14 +85,14 @@ const countImages = () => {
   return count;
 };
 
-const handleImage = async (element, winner) => {
+const handleImageClick = async (element, winner) => {
   const alt = element.alt;
   if (winner) {
     const newSrc = await getImage('winner');
     console.log('newSrc', newSrc);
     element.src = winningImage;
     element.srcset = winningImage;
-    // redirect to winning link
+
     setTimeout(() => {
       window.location.href = winningLink;
     }, 3000);
@@ -114,7 +113,7 @@ const handleImage = async (element, winner) => {
     }
   } else {
     if (DEBUG) console.log('eventListener: No alt text on image');
-    const newSrc = await getImage('random');
+    const newSrc = await getImage('futuristic');
     element.src = newSrc;
 
     element.srcset = newSrc;
@@ -134,7 +133,7 @@ const makeWeird = async () => {
 
       imageCount = countImages();
 
-      winningImageIndex = Math.floor(Math.random() * imageCount);
+      // winningImageIndex = Math.floor(Math.random() * imageCount);
       if (DEBUG) console.log('winningElement', winningImageIndex);
 
       updateImages(document.body);
@@ -159,6 +158,7 @@ const makeWeird = async () => {
 
 const checkWinner = (element) => {
   let elementOk = true;
+  if (element.src.includes('data:image/gif')) elementOk = false;
   return elementOk;
 };
 
