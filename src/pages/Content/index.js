@@ -37,13 +37,10 @@ let count = 0;
 let winningElement = 0;
 let endNodesCount = 0;
 const changeContent = async (element) => {
-  if (DEBUG_CHANGE) console.log('element: ', element);
-
   const children = element?.children;
   element.addEventListener('mousedown', noClicking);
   element.addEventListener('mouseup', noClicking);
 
-  if (DEBUG_CHANGE) console.log('___');
   if (children.length > 0) {
     element.addEventListener('click', noClicking);
     for (let i = 0; i < children.length; i++) {
@@ -87,6 +84,7 @@ const changeContent = async (element) => {
             console.log('eventListener: element.nodeName =>', element.nodeName);
 
           await loadFadeWait(element, 0);
+          console.log('element.nodeName', element.nodeName);
           switch (element.nodeName) {
             case 'IMG':
               await handleImage(element, winner);
@@ -97,7 +95,7 @@ const changeContent = async (element) => {
           }
           await loadReturn(element, 0);
         } else {
-          if (DEBUG_GENERAL) console.log('makeWeird() onclick disabled');
+          if (DEBUG_LISTENER) console.log('makeWeird() onclick disabled');
         }
       });
     });
@@ -108,7 +106,6 @@ const countEndNodes = () => {
   let count = 0;
   const elements = document.body.getElementsByTagName('*');
   for (let i = 0; i < elements.length; i++) {
-    // leave out elements with no display
     if (
       (elements[i].style.display !== 'none' ||
         elements[i].style.display !== '') &&
@@ -125,17 +122,36 @@ const handleImage = async (element, winner) => {
   const alt = element.alt;
   if (winner) {
     const newSrc = await getImage('winner');
-    element.src = newSrc;
+    console.log('newSrc', newSrc);
+    element.src =
+      'https://lexica-serve-encoded-images.sharif.workers.dev/md/02d25547-5372-4e7d-accd-aff511bf0b40';
+    element.srcset =
+      'https://lexica-serve-encoded-images.sharif.workers.dev/md/02d25547-5372-4e7d-accd-aff511bf0b40';
     // redirect to winning link
     setTimeout(() => {
       window.location.href = winningLink;
     }, 3000);
   } else if (alt) {
-    const newSrc = await getImage(alt);
+    try {
+      console.log('alt', alt);
+      const newSrc = await getImage(alt);
 
-    element.src = newSrc;
+      element.src = newSrc;
+
+      element.srcset = newSrc;
+    } catch {
+      console.log('error in handleImage()');
+      const newSrc = await getImage('error');
+      element.src = newSrc;
+
+      element.srcset = newSrc;
+    }
   } else {
     if (DEBUG_LISTENER) console.log('eventListener: No alt text on image');
+    const newSrc = await getImage('random');
+    element.src = newSrc;
+
+    element.srcset = newSrc;
   }
 };
 
@@ -225,7 +241,7 @@ const checkWinner = (element) => {
   ) {
     elementOk = false;
   }
-  if (element.textContent.trim() === '') {
+  if (element.nodeName !== 'IMG' && element.textContent.trim() === '') {
     elementOk = false;
   }
   if (
