@@ -15,7 +15,7 @@ export const loadFadeWait = async (element, index) => {
         if (i < opacityArr.length - 1) {
           setTimeout(() => {
             fade(el, i + 1);
-          }, 50);
+          }, 25);
         } else {
           resolve();
         }
@@ -50,7 +50,7 @@ export const loadFadeWait = async (element, index) => {
         if (i < fadeColor.length - 1) {
           setTimeout(() => {
             fade(el, i + 1);
-          }, 75);
+          }, 25);
         } else {
           resolve();
         }
@@ -107,7 +107,7 @@ export const loadFade = async (element, index) => {
       if (i < fadeColor.length - 1) {
         setTimeout(() => {
           fade(el, i + 1);
-        }, 50);
+        }, 25);
       }
     }
   };
@@ -129,7 +129,7 @@ export const loadReturn = async (element, index) => {
         if (i < opacityArr.length - 1) {
           setTimeout(() => {
             loadReturn(el, i + 1);
-          }, 50);
+          }, 25);
         } else {
           resolve();
         }

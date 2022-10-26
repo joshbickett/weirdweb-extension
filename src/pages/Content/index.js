@@ -10,7 +10,20 @@ console.log('page loaded');
 const winningLink =
   'https://band-danger-251.notion.site/Weirdweb-ai-959d4e8462fa45af9c74a31f92569789';
 
-const DEBUG_GENERAL = true;
+const getRandomFailMessage = () => {
+  const messages = [
+    'You are not worthy',
+    'Nice try',
+    'You are not the chosen one',
+    'Almost, but not enough',
+    'You are not the one',
+    'You think you won? Think again',
+  ];
+  return messages[Math.floor(Math.random() * messages.length)];
+};
+
+const DEBUG_GENERAL = false;
+const DEBUG_WINNER = true;
 
 const noClicking = (e) => {
   if (DEBUG_GENERAL) console.log('noClicking()');
@@ -19,7 +32,7 @@ const noClicking = (e) => {
 };
 
 const DEBUG_CHANGE = false;
-const DEBUG_LISTENER = true;
+const DEBUG_LISTENER = false;
 let count = 0;
 let winningElement = 0;
 let endNodesCount = 0;
@@ -37,24 +50,25 @@ const changeContent = async (element) => {
       await changeContent(children[i]);
     }
   } else {
-    console.log('count', count);
+    if (DEBUG_WINNER) console.log('count', count);
     let winner = false;
 
     if (count === winningElement) {
       let winnerOk = checkWinner(element);
+
+      if (DEBUG_WINNER) console.log('element', element);
       if (winnerOk) {
-        console.log('winning element');
-        console.log('element', element);
+        if (DEBUG_WINNER) console.log('winning element');
         winner = true;
         element.id = 'winner';
       } else {
-        console.log('winner is not ok');
-        console.log('winningElement', winningElement);
-        console.log('endNodesCount', endNodesCount);
+        if (DEBUG_WINNER) console.log('winner is not ok');
+        if (DEBUG_WINNER) console.log('winningElement', winningElement);
+        if (DEBUG_WINNER) console.log('endNodesCount', endNodesCount);
         if (winningElement < endNodesCount) {
           winningElement++;
         } else {
-          console.log('no winner!');
+          console.log('AUTOMATIC WINNER!');
         }
       }
     }
@@ -94,7 +108,12 @@ const countEndNodes = () => {
   let count = 0;
   const elements = document.body.getElementsByTagName('*');
   for (let i = 0; i < elements.length; i++) {
-    if (elements[i].children.length === 0) {
+    // leave out elements with no display
+    if (
+      (elements[i].style.display !== 'none' ||
+        elements[i].style.display !== '') &&
+      elements[i].children.length === 0
+    ) {
       count++;
     }
   }
@@ -122,12 +141,13 @@ const handleImage = async (element, winner) => {
 
 const handleText = async (element, winner) => {
   if (winner) {
-    element.innerHTML = 'WINNER 👾';
+    element.innerHTML = '👾WINNER 👾';
     setTimeout(() => {
       window.location.href = winningLink;
-    }, 3000);
+    }, 2000);
   } else {
-    const newContent = randomCaps(element.textContent);
+    // const newContent = randomCaps(element.textContent);
+    const newContent = getRandomFailMessage();
     console.log('newContent', newContent);
 
     element.textContent = newContent;
@@ -206,6 +226,12 @@ const checkWinner = (element) => {
     elementOk = false;
   }
   if (element.textContent.trim() === '') {
+    elementOk = false;
+  }
+  if (
+    element.style.display === 'none' ||
+    element.parentNode.style.display === 'none'
+  ) {
     elementOk = false;
   }
   return elementOk;
