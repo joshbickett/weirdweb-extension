@@ -15,7 +15,7 @@ const getRandomFailMessage = () => {
     'You are not worthy',
     'Nice try',
     'You are not the chosen one',
-    'Almost, but not enough',
+    'Almost, but not yet',
     'You are not the one',
     'You think you won? Think again',
   ];
@@ -234,6 +234,7 @@ const checkWinner = (element) => {
   ) {
     elementOk = false;
   }
+  if (element.textContent.includes('Unable')) elementOk = false;
   return elementOk;
 };
 
