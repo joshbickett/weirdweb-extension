@@ -18,6 +18,9 @@ let winningImageIndex = 0;
 let imageCount = 0;
 const updateImages = async (element) => {
   const children = element?.children;
+  element.addEventListener('mousedown', noClicking);
+  element.addEventListener('mouseup', noClicking);
+  element.addEventListener('click', noClicking);
 
   if (children.length > 0) {
     for (let i = 0; i < children.length; i++) {
@@ -25,21 +28,17 @@ const updateImages = async (element) => {
     }
   } else {
     if (element.nodeName !== 'IMG') return;
-    element.addEventListener('mousedown', noClicking);
-    element.addEventListener('mouseup', noClicking);
-    element.addEventListener('click', noClicking);
 
     let winner = false;
 
     if (DEBUG) console.log('index', index);
     if (DEBUG) console.log('winningImageIndex', winningImageIndex);
-    if (DEBUG) console.log('element', element);
 
     if (index === winningImageIndex) {
       let winnerOk = checkWinner(element);
 
       if (winnerOk) {
-        if (DEBUG) console.log('winning element');
+        if (DEBUG) console.log('wining element', element);
         winner = true;
         element.id = 'winner';
       } else {
@@ -54,6 +53,7 @@ const updateImages = async (element) => {
     }
     index++;
     element.addEventListener('click', async (e) => {
+      console.log('clicked!!');
       chrome.storage.local.get(['enabled'], async (result) => {
         if (result?.enabled) {
           if (DEBUG) console.log('eventListener: fired e =>', e);
@@ -82,7 +82,7 @@ const countImages = () => {
   for (let i = 0; i < images.length; i++) {
     count++;
   }
-  console.log('countEndNodes()', count);
+  console.log('countImages()', count);
   return count;
 };
 
@@ -138,21 +138,6 @@ const makeWeird = async () => {
       if (DEBUG) console.log('winningElement', winningImageIndex);
 
       updateImages(document.body);
-      document.body.addEventListener('click', async (e) => {
-        if (DEBUG) console.log('eventListener: fired e =>', e);
-        handleClick();
-        e.preventDefault();
-        e.stopPropagation();
-        if (DEBUG) console.log('e.target', e.target);
-        const element = e.target;
-
-        if (DEBUG)
-          console.log('eventListener: element.nodeName =>', element.nodeName);
-
-        if (element.nodeName === 'BODY') {
-          handleBody();
-        }
-      });
 
       if (DEBUG) console.log('appending cursor');
       const cursor = document.createElement('img');
