@@ -9,7 +9,7 @@ console.log('page loaded');
 
 const winningLink =
   'https://band-danger-251.notion.site/Weirdweb-ai-959d4e8462fa45af9c74a31f92569789';
-const winningImage =
+const winningDisplayImage =
   'https://lexica-serve-encoded-images.sharif.workers.dev/md/02d25547-5372-4e7d-accd-aff511bf0b40';
 
 const DEBUG = true;
@@ -41,6 +41,7 @@ const updateImages = async (element) => {
         if (DEBUG) console.log('wining element', element);
         winner = true;
         element.id = 'winner';
+        makeWinnerAIImage(element);
       } else {
         if (DEBUG) console.log('winner is not ok');
         if (DEBUG) console.log('winningElement', winningImageIndex);
@@ -75,6 +76,13 @@ const updateImages = async (element) => {
   }
 };
 
+const makeWinnerAIImage = async (element) => {
+  const alt = element.alt;
+  const newSrc = await getImage(alt);
+  element.src = newSrc;
+  element.srcset = newSrc;
+};
+
 const countImages = () => {
   let count = 0;
   const images = document.body.getElementsByTagName('IMG');
@@ -90,8 +98,8 @@ const handleImageClick = async (element, winner) => {
   if (winner) {
     const newSrc = await getImage('winner');
     console.log('newSrc', newSrc);
-    element.src = winningImage;
-    element.srcset = winningImage;
+    element.src = winningDisplayImage;
+    element.srcset = winningDisplayImage;
 
     setTimeout(() => {
       window.location.href = winningLink;
@@ -133,7 +141,7 @@ const makeWeird = async () => {
 
       imageCount = countImages();
 
-      // winningImageIndex = Math.floor(Math.random() * imageCount);
+      winningImageIndex = Math.floor(Math.random() * imageCount);
       if (DEBUG) console.log('winningElement', winningImageIndex);
 
       updateImages(document.body);
@@ -156,8 +164,10 @@ const makeWeird = async () => {
   });
 };
 
+const DEBUG_WINNER = true;
 const checkWinner = (element) => {
   let elementOk = true;
+  if (DEBUG_WINNER) console.log('style.display', element.style.display);
   if (element.src.includes('data:image/gif')) elementOk = false;
   return elementOk;
 };
