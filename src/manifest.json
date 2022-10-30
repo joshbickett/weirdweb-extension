@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Weirdweb.ai - An AI powered web game.",
+  "name": "Weirdweb.ai - A web-based game finding AI generated images.",
   "version": "0.0.0.1",
-  "description": "Weirdweb is an AI powered web game. Find and click the AI generated image to win.",
+  "description": "Weirdweb is an web based game where you find AI generated images. Find and click the AI generated image to win.",
   "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html",
